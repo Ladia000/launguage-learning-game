@@ -1,0 +1,109 @@
+{
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "confirm": "Confirm"
+  },
+  "home": {
+    "title": "Chinese Quiz",
+    "learn": "Study Mode",
+    "test": "Quiz Mode",
+    "review": "Review Mode",
+    "progress": "{{known}} / {{total}} words learned",
+    "mistakeBadge": "{{count}} words to review",
+    "learnDesc": "Study words with flashcards",
+    "testDesc": "Take a 4-choice quiz",
+    "reviewDesc": "Review your mistakes",
+    "settings": "Settings"
+  },
+  "learn": {
+    "title": "Study Mode",
+    "tapHint": "Tap to reveal answer",
+    "knew": "I knew it ✓",
+    "didntKnow": "Didn't know",
+    "complete": "Study complete!",
+    "progress": "{{current}} / {{total}}",
+    "example": "Example"
+  },
+  "test": {
+    "title": "Quiz Mode",
+    "question": "Question {{current}} / {{total}}",
+    "correct": "Correct! Great job!",
+    "correct2": "Keep it up! You're improving!",
+    "wrong": "Not quite! That's okay",
+    "wrongAnswer": "Answer: \"{{answer}}\" — Practice in Review Mode!",
+    "finish": "Finish Quiz"
+  },
+  "result": {
+    "title": "Results",
+    "score": "{{score}} / {{total}}",
+    "accuracy": "Accuracy {{percent}}%",
+    "perfect": "Perfect Score!!",
+    "perfectSub": "Amazing! You're a genius!",
+    "perfectBadge": "Gold Badge Earned!",
+    "nextChallenge": "Next Challenge: Try HSK {{level}}!",
+    "retestWrong": "Retry Wrong Answers",
+    "backHome": "Back to Home",
+    "excellent": "Excellent!",
+    "good": "Good job!",
+    "keep": "Keep practicing!",
+    "wrongList": "Missed Words"
+  },
+  "review": {
+    "title": "Review Mode",
+    "empty": "No words to review 🎉",
+    "emptyDesc": "You've mastered everything!",
+    "retestAll": "Retest All Mistakes",
+    "filterAll": "All",
+    "filterWord": "Words",
+    "filterIdiom": "Idioms",
+    "mistakeCount": "{{count}}x",
+    "mastered": "Mastered",
+    "consecutiveCorrect": "{{count}} correct in a row"
+  },
+  "wordDetail": {
+    "title": "Word Detail",
+    "history": "Study History",
+    "retest": "Retest This Word",
+    "mistakeCount": "Mistakes: {{count}}",
+    "lastMistake": "Last mistake: {{date}}",
+    "correct": "Correct",
+    "wrong": "Wrong"
+  },
+  "retest": {
+    "title": "Retest"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Display Language",
+    "level": "HSK Level",
+    "quizCount": "Quiz Count",
+    "quizCountUnit": " questions",
+    "resetProgress": "Reset Progress",
+    "resetConfirm": "This will delete all progress and mistake records. This cannot be undone.",
+    "resetButton": "Reset",
+    "cancel": "Cancel",
+    "japanese": "🇯🇵 日本語",
+    "english": "🇺🇸 English",
+    "levelDesc": "Multiple selection"
+  },
+  "onboarding": {
+    "language": {
+      "title": "表示言語を選んでください",
+      "subtitle": "Choose your language"
+    },
+    "level": {
+      "title": "Choose your\nHSK level(s)",
+      "subtitle": "Select at least one",
+      "hsk1": "Basic 150 words",
+      "hsk2": "Daily 300 words",
+      "hsk3": "Elementary 600 words",
+      "hsk4": "Intermediate 1200 words",
+      "hsk5": "Advanced 2500 words",
+      "hsk6": "Proficient 5000 words"
+    },
+    "start": "Get Started"
+  }
+}

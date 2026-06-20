@@ -1,0 +1,109 @@
+{
+  "common": {
+    "back": "戻る",
+    "next": "次へ",
+    "cancel": "キャンセル",
+    "loading": "読み込み中...",
+    "confirm": "確認"
+  },
+  "home": {
+    "title": "中国語クイズ",
+    "learn": "学習モード",
+    "test": "テストモード",
+    "review": "復習モード",
+    "progress": "{{known}} / {{total}} 語学習済み",
+    "mistakeBadge": "{{count}} 語復習待ち",
+    "learnDesc": "フラッシュカードで単語を覚えよう",
+    "testDesc": "4択クイズに挑戦しよう",
+    "reviewDesc": "間違えた単語を復習しよう",
+    "settings": "設定"
+  },
+  "learn": {
+    "title": "学習モード",
+    "tapHint": "タップして答えを見る",
+    "knew": "知ってた ✓",
+    "didntKnow": "知らなかった",
+    "complete": "学習完了！",
+    "progress": "{{current}} / {{total}}",
+    "example": "例文"
+  },
+  "test": {
+    "title": "テストモード",
+    "question": "問題 {{current}} / {{total}}",
+    "correct": "正解！すばらしい！",
+    "correct2": "その調子！どんどん上手になってます！",
+    "wrong": "惜しかった！大丈夫です",
+    "wrongAnswer": "正解は「{{answer}}」— 復習モードで練習しよう！",
+    "finish": "テスト終了"
+  },
+  "result": {
+    "title": "結果",
+    "score": "{{score}} / {{total}}",
+    "accuracy": "正解率 {{percent}}%",
+    "perfect": "満点達成！！",
+    "perfectSub": "完璧です！あなたは天才！",
+    "perfectBadge": "金バッジ獲得！",
+    "nextChallenge": "次のチャレンジ: HSK {{level}} に挑戦しよう！",
+    "retestWrong": "間違いだけ再テスト",
+    "backHome": "ホームへ戻る",
+    "excellent": "素晴らしい！",
+    "good": "よくできました！",
+    "keep": "もう少し頑張ろう！",
+    "wrongList": "間違えた単語"
+  },
+  "review": {
+    "title": "復習モード",
+    "empty": "復習する単語がありません 🎉",
+    "emptyDesc": "全部マスターしています！",
+    "retestAll": "すべての誤答で再テスト",
+    "filterAll": "すべて",
+    "filterWord": "単語",
+    "filterIdiom": "慣用句",
+    "mistakeCount": "{{count}} 回",
+    "mastered": "習得済み",
+    "consecutiveCorrect": "{{count}} 回連続正解"
+  },
+  "wordDetail": {
+    "title": "単語詳細",
+    "history": "学習履歴",
+    "retest": "この単語を再テスト",
+    "mistakeCount": "間違い回数: {{count}} 回",
+    "lastMistake": "最終間違い: {{date}}",
+    "correct": "正解",
+    "wrong": "不正解"
+  },
+  "retest": {
+    "title": "再テスト"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "表示言語",
+    "level": "HSK レベル",
+    "quizCount": "出題数",
+    "quizCountUnit": "問",
+    "resetProgress": "進捗をリセット",
+    "resetConfirm": "すべての進捗・誤答記録を削除します。この操作は元に戻せません。",
+    "resetButton": "リセットする",
+    "cancel": "キャンセル",
+    "japanese": "🇯🇵 日本語",
+    "english": "🇺🇸 English",
+    "levelDesc": "複数選択可"
+  },
+  "onboarding": {
+    "language": {
+      "title": "表示言語を選んでください",
+      "subtitle": "Choose your language"
+    },
+    "level": {
+      "title": "学習する HSK レベルを\n選んでください",
+      "subtitle": "最低1つ選択してください",
+      "hsk1": "基礎 150語",
+      "hsk2": "日常 300語",
+      "hsk3": "初中級 600語",
+      "hsk4": "中級 1200語",
+      "hsk5": "上級 2500語",
+      "hsk6": "最上級 5000語"
+    },
+    "start": "はじめる"
+  }
+}
