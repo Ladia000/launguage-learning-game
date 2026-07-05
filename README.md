@@ -490,3 +490,11 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 16. 動作確認・バグ修正
 --- 以下は MVP 外（後から追加） ---
 17. Supabase 連携（クラウド保存・認証）
+
+---
+
+## ライセンス表記
+
+This app uses dictionary data from CC-CEDICT
+(https://www.mdbg.net/chinese/dictionary?page=cedict)
+licensed under Creative Commons Attribution-ShareAlike 4.0 International

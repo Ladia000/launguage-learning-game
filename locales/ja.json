@@ -87,7 +87,9 @@
     "cancel": "キャンセル",
     "japanese": "🇯🇵 日本語",
     "english": "🇺🇸 English",
-    "levelDesc": "複数選択可"
+    "levelDesc": "複数選択可",
+    "license": "ライセンス情報",
+    "licenseText": "This app uses dictionary data from CC-CEDICT\n(https://www.mdbg.net/chinese/dictionary?page=cedict)\nlicensed under Creative Commons Attribution-ShareAlike 4.0 International"
   },
   "onboarding": {
     "language": {

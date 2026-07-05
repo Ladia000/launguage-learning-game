@@ -136,6 +136,11 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* ライセンス情報 */}
+        <Section title={t('settings.license')}>
+          <Text style={styles.licenseText}>{t('settings.licenseText')}</Text>
+        </Section>
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -177,4 +182,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.button, paddingVertical: 14, alignItems: 'center',
   },
   resetButtonText: { color: Colors.wrong, fontSize: fontSize.button, fontWeight: '700' },
+  licenseText: { fontSize: fontSize.small, color: Colors.textSub, lineHeight: 16 },
 });
