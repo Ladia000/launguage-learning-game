@@ -14,6 +14,13 @@ interface Props {
 const AUTO_PLAY_INTERVAL_MS = 800;
 const VIEWBOX_SIZE = 1024;
 
+// makemeahanzi の座標系（Y軸が下から上）を SVG の座標系（Y軸が上から下）に変換する
+// matrix(a,b,c,d,e,f) は (x,y) -> (a*x + c*y + e, b*x + d*y + f) に写像する
+export const STROKE_GROUP_TRANSFORM = `matrix(1,0,0,-1,0,${VIEWBOX_SIZE})`;
+
+export const getVisibleStrokes = <T,>(strokes: T[], currentIndex: number): T[] =>
+  strokes.slice(0, currentIndex + 1);
+
 export function StrokeAnimation({
   hanzi,
   size = 200,
@@ -104,8 +111,8 @@ export function StrokeAnimation({
             />
           </>
         )}
-        <G transform="matrix(1,0,0,-1,0,1024)">
-          {strokeData.strokes.slice(0, currentIndex + 1).map((pathData, index) => (
+        <G transform={STROKE_GROUP_TRANSFORM}>
+          {getVisibleStrokes(strokeData.strokes, currentIndex).map((pathData, index) => (
             <Path
               key={index}
               d={pathData}
