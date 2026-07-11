@@ -58,6 +58,15 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
       currentStrokeRef.current = [];
       setCurrentStroke([]);
     },
+    onMouseLeave: () => {
+      if (!isDrawingRef.current) return;
+      isDrawingRef.current = false;
+      if (currentStrokeRef.current.length > 0) {
+        setStrokes((prev) => [...prev, currentStrokeRef.current]);
+        currentStrokeRef.current = [];
+        setCurrentStroke([]);
+      }
+    },
   } : {};
 
   const panResponder = useRef(
@@ -88,11 +97,15 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   ).current;
 
   const handleJudge = async () => {
+    if (strokes.length === 0) return;
+    console.log('strokes:', strokes.length);
     setIsRecognizing(true);
     try {
       const res = await recognizeHandwriting('', expectedChar, strokes.length);
       setResult(res);
       onResult?.(res);
+    } catch (e) {
+      console.error('判定エラー:', e);
     } finally {
       setIsRecognizing(false);
     }
@@ -177,7 +190,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
         <TouchableOpacity
           style={[styles.button, styles.buttonPrimary]}
           onPress={handleJudge}
-          disabled={isRecognizing}
+          disabled={strokes.length === 0}
         >
           {isRecognizing ? (
             <ActivityIndicator color="#FFFFFF" />
