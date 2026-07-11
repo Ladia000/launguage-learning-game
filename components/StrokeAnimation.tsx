@@ -40,7 +40,7 @@ export function StrokeAnimation({
       setCurrentIndex((prev) => Math.min(prev + 1, totalStrokes - 1));
     }, AUTO_PLAY_INTERVAL_MS);
     return () => clearTimeout(timer);
-  }, [autoPlay, currentIndex, totalStrokes]);
+  }, [autoPlay, currentIndex, totalStrokes, hanzi]);
 
   useEffect(() => {
     if (totalStrokes === 0) return;
@@ -104,7 +104,7 @@ export function StrokeAnimation({
             />
           </>
         )}
-        <G transform="scale(1, -1) translate(0, -1024)">
+        <G transform="matrix(1,0,0,-1,0,1024)">
           {strokeData.strokes.slice(0, currentIndex + 1).map((pathData, index) => (
             <Path
               key={index}
