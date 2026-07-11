@@ -34,7 +34,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
 
   const webHandlers = Platform.OS === 'web' ? {
     onMouseDown: (e: ReactMouseEvent) => {
-      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       isDrawingRef.current = true;
@@ -44,7 +44,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
     },
     onMouseMove: (e: ReactMouseEvent) => {
       if (!isDrawingRef.current) return;
-      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const updated = [...currentStrokeRef.current, `L ${x} ${y}`];
@@ -123,7 +123,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
     <View style={styles.container}>
       <View
         style={[styles.canvas, { width: size, height: size }]}
-        {...panResponder.panHandlers}
+        {...(Platform.OS === 'web' ? {} : panResponder.panHandlers)}
       >
         <Svg width={size} height={size} {...webHandlers}>
           <SvgText
