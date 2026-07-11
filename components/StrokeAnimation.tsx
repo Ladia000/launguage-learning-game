@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Svg, { Path, Line, Text as SvgText } from 'react-native-svg';
+import Svg, { Path, Line, G, Text as SvgText } from 'react-native-svg';
 import { getStrokeData } from '@/services/strokeOrder';
 
 interface Props {
@@ -104,13 +104,15 @@ export function StrokeAnimation({
             />
           </>
         )}
-        {strokeData.strokes.slice(0, currentIndex + 1).map((pathData, index) => (
-          <Path
-            key={index}
-            d={pathData}
-            fill={index === currentIndex ? '#534AB7' : '#1A1A2E'}
-          />
-        ))}
+        <G transform="scale(1, -1) translate(0, -1024)">
+          {strokeData.strokes.slice(0, currentIndex + 1).map((pathData, index) => (
+            <Path
+              key={index}
+              d={pathData}
+              fill={index === currentIndex ? '#534AB7' : '#1A1A2E'}
+            />
+          ))}
+        </G>
       </Svg>
 
       <Text style={styles.progress}>
