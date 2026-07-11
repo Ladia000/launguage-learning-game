@@ -1,13 +1,6 @@
 import { useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  PanResponder,
-  GestureResponderEvent,
-  ActivityIndicator,
-} from 'react-native';
+import type { MouseEvent as ReactMouseEvent } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Svg, { Path, G, Line, Text as SvgText } from 'react-native-svg';
 import { recognizeHandwriting } from '@/services/handwriting';
 import type { HandwritingResult } from '@/types';
@@ -26,38 +19,50 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   const [result, setResult] = useState<HandwritingResult | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
 
-  const strokesRef = useRef<string[][]>([]);
   const currentStrokeRef = useRef<string[]>([]);
+  const isDrawingRef = useRef<boolean>(false);
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt: GestureResponderEvent) => {
-        const { locationX, locationY } = evt.nativeEvent;
-        currentStrokeRef.current = [`M ${locationX} ${locationY}`];
-        setCurrentStroke(currentStrokeRef.current);
-      },
-      onPanResponderMove: (evt: GestureResponderEvent) => {
-        const { locationX, locationY } = evt.nativeEvent;
-        currentStrokeRef.current = [
-          ...currentStrokeRef.current,
-          `L ${locationX} ${locationY}`,
-        ];
-        setCurrentStroke(currentStrokeRef.current);
-      },
-      onPanResponderRelease: () => {
-        if (currentStrokeRef.current.length > 0) {
-          strokesRef.current = [...strokesRef.current, currentStrokeRef.current];
-          setStrokes(strokesRef.current);
-        }
-        currentStrokeRef.current = [];
-        setCurrentStroke([]);
-      },
-    })
-  ).current;
+  const handleMouseDown = (e: ReactMouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    isDrawingRef.current = true;
+    const newStroke = [`M ${x} ${y}`];
+    currentStrokeRef.current = newStroke;
+    setCurrentStroke(newStroke);
+  };
+
+  const handleMouseMove = (e: ReactMouseEvent) => {
+    if (!isDrawingRef.current) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const updated = [...currentStrokeRef.current, `L ${x} ${y}`];
+    currentStrokeRef.current = updated;
+    setCurrentStroke(updated);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDrawingRef.current) return;
+    isDrawingRef.current = false;
+    setStrokes((prev) => [...prev, currentStrokeRef.current]);
+    currentStrokeRef.current = [];
+    setCurrentStroke([]);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDrawingRef.current) return;
+    isDrawingRef.current = false;
+    if (currentStrokeRef.current.length > 0) {
+      setStrokes((prev) => [...prev, currentStrokeRef.current]);
+      currentStrokeRef.current = [];
+      setCurrentStroke([]);
+    }
+  };
 
   const handleJudge = async () => {
     if (strokes.length === 0) return;
+    console.log('strokes:', strokes.length);
     setIsRecognizing(true);
     try {
       const res = await recognizeHandwriting('', expectedChar, strokes.length);
@@ -71,7 +76,6 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   };
 
   const handleRetry = () => {
-    strokesRef.current = [];
     currentStrokeRef.current = [];
     setStrokes([]);
     setCurrentStroke([]);
@@ -80,9 +84,18 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
 
   return (
     <View style={styles.container}>
-      <View
-        style={[styles.canvas, { width: size, height: size }]}
-        {...panResponder.panHandlers}
+      <div
+        style={{
+          width: size,
+          height: size,
+          backgroundColor: '#FFFFFF',
+          borderRadius: 12,
+          overflow: 'hidden',
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       >
         <Svg width={size} height={size}>
           <SvgText
@@ -124,7 +137,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
             )}
           </G>
         </Svg>
-      </View>
+      </div>
 
       {result && (
         <View style={styles.resultBox}>
@@ -165,11 +178,6 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-  },
-  canvas: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    overflow: 'hidden',
   },
   resultBox: {
     marginTop: 12,
