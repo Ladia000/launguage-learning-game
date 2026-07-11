@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import {
+  View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, useWindowDimensions,
+} from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useWordStore } from '../../store/useWordStore';
@@ -21,6 +23,10 @@ export default function WriteScreen() {
   const { filteredWords } = useWordStore();
   const { recordPractice } = useWriteStore();
   const { language } = useSettingsStore();
+  const { width: windowWidth } = useWindowDimensions();
+  // 画面幅に応じて練習キャンバスのサイズを可変にする（固定260pxだと
+  // 広い画面で紙の領域が狭く見える・文字が窮屈になる問題への対応）
+  const canvasSize = Math.min(Math.max(windowWidth - spacing.lg * 2 - 16, 260), 400);
 
   // 初回レンダリングはサーバー/クライアントで一致させるため未シャッフルの順序を使い、
   // マウント後（ハイドレーション完了後）に useEffect でシャッフルする
@@ -152,7 +158,7 @@ export default function WriteScreen() {
             <WriteCanvas
               key={current.id}
               expectedChar={current.hanzi}
-              size={260}
+              size={canvasSize}
               onResult={handleResult}
             />
           )}

@@ -23,6 +23,9 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   const isDrawingRef = useRef<boolean>(false);
 
   const handleMouseDown = (e: ReactMouseEvent) => {
+    // ブラウザ標準のテキスト選択・ドラッグ開始を防ぐ
+    // （これが発生すると mousemove が届かなくなり描画できなくなる）
+    e.preventDefault();
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -91,6 +94,10 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
           backgroundColor: '#FFFFFF',
           borderRadius: 12,
           overflow: 'hidden',
+          touchAction: 'none',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          cursor: 'crosshair',
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -101,7 +108,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
           <SvgText
             x={size / 2}
             y={size / 2}
-            fontSize={size * 0.7}
+            fontSize={size * 0.6}
             fill="#534AB7"
             opacity={0.08}
             textAnchor="middle"

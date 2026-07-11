@@ -88,7 +88,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
           <SvgText
             x={size / 2}
             y={size / 2}
-            fontSize={size * 0.7}
+            fontSize={size * 0.6}
             fill="#534AB7"
             opacity={0.08}
             textAnchor="middle"
