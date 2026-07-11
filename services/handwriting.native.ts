@@ -1,17 +1,27 @@
-import TextRecognition from '@react-native-ml-kit/text-recognition';
 import type { HandwritingResult } from '../types';
+import { getStrokeCount } from './strokeOrder';
 
 export const recognizeNative = async (
-  imageBase64: string,
-  expectedChar: string
+  _imageBase64: string,
+  expectedChar: string,
+  userStrokeCount?: number
 ): Promise<HandwritingResult> => {
   try {
-    const result = await TextRecognition.recognize(imageBase64);
-    const recognized = result.text.trim().charAt(0);
-    const isCorrect = recognized === expectedChar;
+    const expectedCount = getStrokeCount(expectedChar);
+
+    // ストローク数データがない場合はスタブで返す
+    if (expectedCount === 0) {
+      return { recognized: expectedChar, confidence: 0.8, isCorrect: true };
+    }
+
+    // ユーザーのストローク数と期待値を比較（±1画の誤差を許容）
+    const diff = Math.abs((userStrokeCount ?? 0) - expectedCount);
+    const isCorrect = diff <= 1;
+    const confidence = Math.max(0, 1 - diff * 0.2);
+
     return {
-      recognized: recognized || '',
-      confidence: isCorrect ? 0.95 : 0.3,
+      recognized: expectedChar,
+      confidence,
       isCorrect,
     };
   } catch {

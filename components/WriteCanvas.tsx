@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   PanResponder,
   GestureResponderEvent,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Svg, { Path, G, Line, Text as SvgText } from 'react-native-svg';
 import { recognizeHandwriting } from '@/services/handwriting';
@@ -28,6 +30,35 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
 
   const strokesRef = useRef<string[][]>([]);
   const currentStrokeRef = useRef<string[]>([]);
+  const isDrawingRef = useRef<boolean>(false);
+
+  const webHandlers = Platform.OS === 'web' ? {
+    onMouseDown: (e: ReactMouseEvent) => {
+      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      isDrawingRef.current = true;
+      const newStroke = [`M ${x} ${y}`];
+      currentStrokeRef.current = newStroke;
+      setCurrentStroke(newStroke);
+    },
+    onMouseMove: (e: ReactMouseEvent) => {
+      if (!isDrawingRef.current) return;
+      const rect = (e.target as HTMLElement).getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const updated = [...currentStrokeRef.current, `L ${x} ${y}`];
+      currentStrokeRef.current = updated;
+      setCurrentStroke(updated);
+    },
+    onMouseUp: () => {
+      if (!isDrawingRef.current) return;
+      isDrawingRef.current = false;
+      setStrokes((prev) => [...prev, currentStrokeRef.current]);
+      currentStrokeRef.current = [];
+      setCurrentStroke([]);
+    },
+  } : {};
 
   const panResponder = useRef(
     PanResponder.create({
@@ -59,7 +90,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   const handleJudge = async () => {
     setIsRecognizing(true);
     try {
-      const res = await recognizeHandwriting('', expectedChar);
+      const res = await recognizeHandwriting('', expectedChar, strokes.length);
       setResult(res);
       onResult?.(res);
     } finally {
@@ -81,7 +112,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
         style={[styles.canvas, { width: size, height: size }]}
         {...panResponder.panHandlers}
       >
-        <Svg width={size} height={size}>
+        <Svg width={size} height={size} {...webHandlers}>
           <SvgText
             x={size / 2}
             y={size / 2}
