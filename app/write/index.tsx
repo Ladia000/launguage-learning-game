@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -22,11 +22,14 @@ export default function WriteScreen() {
   const { recordPractice } = useWriteStore();
   const { language } = useSettingsStore();
 
-  const wordList: Word[] = useMemo(
-    () => [...filteredWords].sort(() => Math.random() - 0.5).slice(0, MAX_WORDS),
+  // 初回レンダリングはサーバー/クライアントで一致させるため未シャッフルの順序を使い、
+  // マウント後（ハイドレーション完了後）に useEffect でシャッフルする
+  // （render中に Math.random() を呼ぶと React Hydration Error #418 が発生するため）
+  const [wordList, setWordList] = useState<Word[]>(filteredWords.slice(0, MAX_WORDS));
+  useEffect(() => {
+    setWordList([...filteredWords].sort(() => Math.random() - 0.5).slice(0, MAX_WORDS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>('stroke');

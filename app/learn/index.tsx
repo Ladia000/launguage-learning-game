@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, SafeAreaView, StyleSheet,
   Animated, ScrollView
@@ -29,11 +29,14 @@ export default function LearnScreen() {
   const [activeTab, setActiveTab] = useState<BackTab>('meaning');
   const flipAnim = useRef(new Animated.Value(0)).current;
 
-  const words: Word[] = useMemo(
-    () => [...filteredWords].sort(() => Math.random() - 0.5),
+  // 初回レンダリングはサーバー/クライアントで一致させるため未シャッフルの順序を使い、
+  // マウント後（ハイドレーション完了後）に useEffect でシャッフルする
+  // （render中に Math.random() を呼ぶと React Hydration Error #418 が発生するため）
+  const [words, setWords] = useState<Word[]>(filteredWords);
+  useEffect(() => {
+    setWords([...filteredWords].sort(() => Math.random() - 0.5));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  }, []);
   const current = words[index];
 
   const handleFlip = () => {
