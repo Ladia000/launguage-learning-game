@@ -16,7 +16,10 @@
     "learnDesc": "Study words with flashcards",
     "testDesc": "Take a 4-choice quiz",
     "reviewDesc": "Review your mistakes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "write": "Writing Practice",
+    "writeDesc": "Practice writing kanji",
+    "todayWrite": "{{count}} characters practiced today"
   },
   "learn": {
     "title": "Study Mode",
@@ -25,7 +28,10 @@
     "didntKnow": "Didn't know",
     "complete": "Study complete!",
     "progress": "{{current}} / {{total}}",
-    "example": "Example"
+    "example": "Example",
+    "tabMeaning": "Meaning",
+    "tabStroke": "Stroke order",
+    "tabExample": "Example"
   },
   "test": {
     "title": "Quiz Mode",
@@ -90,6 +96,15 @@
     "levelDesc": "Multiple selection",
     "license": "License Information",
     "licenseText": "This app uses dictionary data from CC-CEDICT\n(https://www.mdbg.net/chinese/dictionary?page=cedict)\nlicensed under Creative Commons Attribution-ShareAlike 4.0 International"
+  },
+  "write": {
+    "title": "Writing Practice",
+    "tabStroke": "See stroke order",
+    "tabPractice": "Practice",
+    "next": "Next character ›",
+    "complete": "Practice complete!",
+    "avgAccuracy": "Average score {{percent}}%",
+    "backHome": "Back to home"
   },
   "onboarding": {
     "language": {

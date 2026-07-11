@@ -10,8 +10,11 @@ import { useMistakeStore } from '../../store/useMistakeStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { AudioButton } from '../../components/AudioButton';
 import { ProgressBar } from '../../components/ProgressBar';
+import { StrokeAnimation } from '../../components/StrokeAnimation';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 import type { Word } from '../../types';
+
+type BackTab = 'meaning' | 'stroke' | 'example';
 
 export default function LearnScreen() {
   const { t } = useTranslation();
@@ -23,6 +26,7 @@ export default function LearnScreen() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [done, setDone] = useState(false);
+  const [activeTab, setActiveTab] = useState<BackTab>('meaning');
   const flipAnim = useRef(new Animated.Value(0)).current;
 
   const words: Word[] = useMemo(
@@ -35,6 +39,7 @@ export default function LearnScreen() {
   const handleFlip = () => {
     Animated.spring(flipAnim, { toValue: flipped ? 0 : 1, useNativeDriver: false }).start();
     setFlipped(!flipped);
+    setActiveTab('meaning');
   };
 
   const handleKnew = () => {
@@ -50,6 +55,7 @@ export default function LearnScreen() {
   const goNext = () => {
     flipAnim.setValue(0);
     setFlipped(false);
+    setActiveTab('meaning');
     if (index + 1 >= words.length) {
       setDone(true);
     } else {
@@ -135,15 +141,57 @@ export default function LearnScreen() {
           pointerEvents={flipped ? 'box-none' : 'none'}
           style={[styles.card, styles.cardBack, { transform: [{ rotateY: backRotate }], opacity: backOpacity }]}
         >
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.backContent}>
-            <Text style={styles.hanziBack}>{current.hanzi}</Text>
-            <Text style={styles.pinyin}>{current.pinyin}</Text>
-            <Text style={styles.meaning}>{meaning}</Text>
-            {current.example && (
-              <View style={styles.exampleBox}>
-                <Text style={styles.exampleLabel}>{t('learn.example')}</Text>
-                <Text style={styles.exampleText}>{current.example}</Text>
-                <Text style={styles.exampleTrans}>{example}</Text>
+          <View style={styles.tabBar}>
+            <TouchableOpacity
+              style={[styles.tab, styles.tabBorder, activeTab === 'meaning' && styles.tabActive]}
+              onPress={() => setActiveTab('meaning')}
+            >
+              <Text style={[styles.tabText, activeTab === 'meaning' && styles.tabTextActive]}>
+                {t('learn.tabMeaning')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, styles.tabBorder, activeTab === 'stroke' && styles.tabActive]}
+              onPress={() => setActiveTab('stroke')}
+            >
+              <Text style={[styles.tabText, activeTab === 'stroke' && styles.tabTextActive]}>
+                {t('learn.tabStroke')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'example' && styles.tabActive]}
+              onPress={() => setActiveTab('example')}
+            >
+              <Text style={[styles.tabText, activeTab === 'example' && styles.tabTextActive]}>
+                {t('learn.tabExample')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={styles.backScroll} showsVerticalScrollIndicator={false} contentContainerStyle={styles.backContent}>
+            {activeTab === 'meaning' && (
+              <>
+                <Text style={styles.hanziBack}>{current.hanzi}</Text>
+                <Text style={styles.pinyin}>{current.pinyin}</Text>
+                <Text style={styles.meaning}>{meaning}</Text>
+                {current.example && (
+                  <View style={styles.exampleBox}>
+                    <Text style={styles.exampleLabel}>{t('learn.example')}</Text>
+                    <Text style={styles.exampleText}>{current.example}</Text>
+                    <Text style={styles.exampleTrans}>{example}</Text>
+                  </View>
+                )}
+              </>
+            )}
+
+            {activeTab === 'stroke' && (
+              <StrokeAnimation hanzi={current.hanzi} size={160} autoPlay={false} showGrid={true} />
+            )}
+
+            {activeTab === 'example' && (
+              <View style={styles.exampleLargeBox}>
+                <Text style={styles.exampleTextLarge}>{current.example}</Text>
+                <Text style={styles.exampleTransLarge}>{example}</Text>
               </View>
             )}
           </ScrollView>
@@ -182,7 +230,39 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1, shadowRadius: 12, elevation: 5,
   },
   cardFront: {},
-  cardBack: {},
+  cardBack: { justifyContent: 'flex-start' },
+  tabBar: {
+    flexDirection: 'row',
+    height: 36,
+    width: '100%',
+    borderRadius: radius.small,
+    overflow: 'hidden',
+  },
+  tab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  tabBorder: {
+    borderRightWidth: 1,
+    borderRightColor: '#E5E7EB',
+  },
+  tabActive: {
+    backgroundColor: '#534AB7',
+  },
+  tabText: {
+    fontSize: fontSize.small,
+    fontWeight: '600',
+    color: '#6B7280',
+  },
+  tabTextActive: {
+    color: '#FFFFFF',
+  },
+  backScroll: {
+    flex: 1,
+    width: '100%',
+  },
   levelBadge: {
     position: 'absolute', top: 16, right: 16,
     backgroundColor: Colors.primaryLight, color: Colors.primary,
@@ -203,6 +283,9 @@ const styles = StyleSheet.create({
   exampleLabel: { fontSize: fontSize.small, color: Colors.textMuted, marginBottom: 4 },
   exampleText: { fontSize: fontSize.body, color: Colors.text, marginBottom: 4 },
   exampleTrans: { fontSize: fontSize.small, color: Colors.textSub },
+  exampleLargeBox: { width: '100%', alignItems: 'center', paddingHorizontal: spacing.md },
+  exampleTextLarge: { fontSize: fontSize.h1, fontWeight: '700', color: Colors.text, textAlign: 'center', marginBottom: spacing.md },
+  exampleTransLarge: { fontSize: fontSize.h2, color: Colors.textSub, textAlign: 'center' },
   actions: {
     flexDirection: 'row', paddingHorizontal: spacing.lg, paddingBottom: spacing.lg,
     paddingTop: spacing.sm, gap: 12,

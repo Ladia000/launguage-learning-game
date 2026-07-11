@@ -16,7 +16,10 @@
     "learnDesc": "フラッシュカードで単語を覚えよう",
     "testDesc": "4択クイズに挑戦しよう",
     "reviewDesc": "間違えた単語を復習しよう",
-    "settings": "設定"
+    "settings": "設定",
+    "write": "手書き練習",
+    "writeDesc": "漢字を書いて覚えよう",
+    "todayWrite": "今日 {{count}} 文字練習済み"
   },
   "learn": {
     "title": "学習モード",
@@ -25,7 +28,10 @@
     "didntKnow": "知らなかった",
     "complete": "学習完了！",
     "progress": "{{current}} / {{total}}",
-    "example": "例文"
+    "example": "例文",
+    "tabMeaning": "意味",
+    "tabStroke": "書き順",
+    "tabExample": "例文"
   },
   "test": {
     "title": "テストモード",
@@ -90,6 +96,15 @@
     "levelDesc": "複数選択可",
     "license": "ライセンス情報",
     "licenseText": "This app uses dictionary data from CC-CEDICT\n(https://www.mdbg.net/chinese/dictionary?page=cedict)\nlicensed under Creative Commons Attribution-ShareAlike 4.0 International"
+  },
+  "write": {
+    "title": "手書き練習",
+    "tabStroke": "書き順を見る",
+    "tabPractice": "練習する",
+    "next": "次の文字 ›",
+    "complete": "練習完了！",
+    "avgAccuracy": "平均スコア {{percent}}%",
+    "backHome": "ホームへ戻る"
   },
   "onboarding": {
     "language": {

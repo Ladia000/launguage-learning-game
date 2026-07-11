@@ -32,6 +32,7 @@ export default function RootLayout() {
         <Stack.Screen name="review/index" />
         <Stack.Screen name="review/[id]" />
         <Stack.Screen name="retest/index" />
+        <Stack.Screen name="write/index" />
         <Stack.Screen name="settings" options={{ animation: 'slide_from_bottom' }} />
       </Stack>
     </>

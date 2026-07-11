@@ -1,0 +1,216 @@
+import { useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  PanResponder,
+  GestureResponderEvent,
+  ActivityIndicator,
+} from 'react-native';
+import Svg, { Path, G, Line, Text as SvgText } from 'react-native-svg';
+import { recognizeHandwriting } from '@/services/handwriting';
+import type { HandwritingResult } from '@/types';
+
+interface Props {
+  expectedChar: string;
+  size?: number;
+  onResult?: (result: HandwritingResult) => void;
+}
+
+const strokeToPath = (stroke: string[]): string => stroke.join(' ');
+
+export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
+  const [strokes, setStrokes] = useState<string[][]>([]);
+  const [currentStroke, setCurrentStroke] = useState<string[]>([]);
+  const [result, setResult] = useState<HandwritingResult | null>(null);
+  const [isRecognizing, setIsRecognizing] = useState(false);
+
+  const strokesRef = useRef<string[][]>([]);
+  const currentStrokeRef = useRef<string[]>([]);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt: GestureResponderEvent) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        currentStrokeRef.current = [`M ${locationX} ${locationY}`];
+        setCurrentStroke(currentStrokeRef.current);
+      },
+      onPanResponderMove: (evt: GestureResponderEvent) => {
+        const { locationX, locationY } = evt.nativeEvent;
+        currentStrokeRef.current = [
+          ...currentStrokeRef.current,
+          `L ${locationX} ${locationY}`,
+        ];
+        setCurrentStroke(currentStrokeRef.current);
+      },
+      onPanResponderRelease: () => {
+        if (currentStrokeRef.current.length > 0) {
+          strokesRef.current = [...strokesRef.current, currentStrokeRef.current];
+          setStrokes(strokesRef.current);
+        }
+        currentStrokeRef.current = [];
+        setCurrentStroke([]);
+      },
+    })
+  ).current;
+
+  const handleJudge = async () => {
+    setIsRecognizing(true);
+    try {
+      const res = await recognizeHandwriting('', expectedChar);
+      setResult(res);
+      onResult?.(res);
+    } finally {
+      setIsRecognizing(false);
+    }
+  };
+
+  const handleRetry = () => {
+    strokesRef.current = [];
+    currentStrokeRef.current = [];
+    setStrokes([]);
+    setCurrentStroke([]);
+    setResult(null);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View
+        style={[styles.canvas, { width: size, height: size }]}
+        {...panResponder.panHandlers}
+      >
+        <Svg width={size} height={size}>
+          <SvgText
+            x={size / 2}
+            y={size / 2}
+            fontSize={size * 0.7}
+            fill="#534AB7"
+            opacity={0.08}
+            textAnchor="middle"
+            alignmentBaseline="central"
+          >
+            {expectedChar}
+          </SvgText>
+
+          <Line x1={size / 2} y1={0} x2={size / 2} y2={size} stroke="#E5E7EB" strokeWidth={1} />
+          <Line x1={0} y1={size / 2} x2={size} y2={size / 2} stroke="#E5E7EB" strokeWidth={1} />
+
+          <G>
+            {strokes.map((stroke, index) => (
+              <Path
+                key={index}
+                d={strokeToPath(stroke)}
+                stroke="#1A1A2E"
+                strokeWidth={4}
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ))}
+            {currentStroke.length > 0 && (
+              <Path
+                d={strokeToPath(currentStroke)}
+                stroke="#1A1A2E"
+                strokeWidth={4}
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            )}
+          </G>
+        </Svg>
+      </View>
+
+      {result && (
+        <View style={styles.resultBox}>
+          <Text
+            style={[
+              styles.resultText,
+              result.isCorrect ? styles.resultCorrect : styles.resultWrong,
+            ]}
+          >
+            {result.isCorrect ? '✓ 正解！' : '✗ もう一度'}
+          </Text>
+          <Text style={styles.confidenceText}>
+            信頼度 {Math.round(result.confidence * 100)}%
+          </Text>
+        </View>
+      )}
+
+      <View style={styles.controls}>
+        <TouchableOpacity style={styles.button} onPress={handleRetry}>
+          <Text style={styles.buttonText}>やり直す</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonPrimary]}
+          onPress={handleJudge}
+          disabled={isRecognizing}
+        >
+          {isRecognizing ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.buttonTextPrimary}>判定</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
+  canvas: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  resultBox: {
+    marginTop: 12,
+    alignItems: 'center',
+  },
+  resultText: {
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  resultCorrect: {
+    color: '#1D9E75',
+  },
+  resultWrong: {
+    color: '#E24B4A',
+  },
+  confidenceText: {
+    marginTop: 4,
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  controls: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 16,
+  },
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: '#EEF0FF',
+    minWidth: 96,
+    alignItems: 'center',
+  },
+  buttonPrimary: {
+    backgroundColor: '#534AB7',
+  },
+  buttonText: {
+    color: '#534AB7',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  buttonTextPrimary: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+});

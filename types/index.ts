@@ -11,7 +11,30 @@ export interface Word {
   example: string;
   example_ja: string;
   example_en: string;
+  strokeCount?: number;
+  tags?: string[];
+  cultureTip?: string;
 }
+
+export interface StrokeData {
+  character: string;
+  strokes: string[];
+  medians: number[][][];
+}
+
+export interface WritePracticeRecord {
+  wordId: string;
+  hanzi: string;
+  practiceCount: number;
+  lastAccuracy: number;
+  lastPracticeAt: string;
+}
+
+export type HandwritingResult = {
+  recognized: string;
+  confidence: number;
+  isCorrect: boolean;
+};
 
 export interface MistakeRecord {
   wordId: string;

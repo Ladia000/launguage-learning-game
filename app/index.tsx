@@ -7,11 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useWordStore } from '../store/useWordStore';
 import { useMistakeStore } from '../store/useMistakeStore';
+import { useWriteStore } from '../store/useWriteStore';
 import { useDeviceType } from '../hooks/useDeviceType';
 import { Colors, fontSize, spacing, radius } from '../constants/typography';
 
 interface ModeCard {
-  key: 'learn' | 'test' | 'review';
+  key: 'learn' | 'test' | 'review' | 'write';
   icon: string;
   path: string;
   color: string;
@@ -21,6 +22,7 @@ const MODES: ModeCard[] = [
   { key: 'learn',  icon: '📖', path: '/learn',  color: '#534AB7' },
   { key: 'test',   icon: '✏️', path: '/test',   color: '#1D9E75' },
   { key: 'review', icon: '🔁', path: '/review', color: '#E24B4A' },
+  { key: 'write',  icon: '✏️', path: '/write',  color: '#1D9E75' },
 ];
 
 export default function HomeScreen() {
@@ -28,6 +30,7 @@ export default function HomeScreen() {
   const { isOnboardingDone } = useSettingsStore();
   const { knownCount, totalCount } = useWordStore();
   const { unmastered } = useMistakeStore();
+  const { getTodayCount } = useWriteStore();
   const { isTablet } = useDeviceType();
 
   if (!isOnboardingDone) {
@@ -37,6 +40,7 @@ export default function HomeScreen() {
   const known = knownCount();
   const total = totalCount();
   const progress = total > 0 ? known / total : 0;
+  const todayWriteCount = getTodayCount();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,6 +64,11 @@ export default function HomeScreen() {
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
           </View>
+          {todayWriteCount > 0 && (
+            <Text style={styles.todayWriteText}>
+              {t('home.todayWrite', { count: todayWriteCount })}
+            </Text>
+          )}
         </View>
 
         {/* Mode cards */}
@@ -111,6 +120,7 @@ const styles = StyleSheet.create({
   progressText: { fontSize: fontSize.body, color: Colors.textSub, marginBottom: 10 },
   progressTrack: { height: 8, backgroundColor: Colors.border, borderRadius: 4, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: Colors.primary, borderRadius: 4 },
+  todayWriteText: { fontSize: fontSize.small, color: Colors.textSub, marginTop: 8 },
   modesContainer: { paddingHorizontal: spacing.lg, gap: 12 },
   modesGrid: { flexDirection: 'row', flexWrap: 'wrap' },
   modeCard: {

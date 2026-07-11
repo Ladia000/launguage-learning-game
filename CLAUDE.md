@@ -23,6 +23,10 @@
 | TTS（発音） | expo-speech（端末ネイティブ TTS・無料・APIキー不要） |
 | 単語データ | ローカル JSON（CC-CEDICT から抽出済み） |
 | スタイリング | StyleSheet（NativeWind は使わない） |
+| 書き順データ | makemeahanzi（MIT・無料） |
+| 書き順表示 | react-native-svg |
+| 手書き認識（Web） | TensorFlow.js v4 |
+| 手書き認識（Native） | Google ML Kit |
 
 ---
 
@@ -345,7 +349,6 @@ export const stopSpeaking = () => {
 - ユーザープロフィール画像・ニックネーム
 - 友達・ランキング機能
 - Push 通知（学習リマインダー）
-- 手書き練習
 - アプリ内課金
 - HSK 公式試験対策コンテンツ
 
@@ -392,6 +395,10 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 13. 復習モード・単語詳細・再テストモード
 14. 設定画面
 15. expo-speech TTS 音声機能（`services/speech.ts` + AudioButton への組み込み）
-16. 動作確認・バグ修正
+16. 書き順アニメーション（StrokeAnimation コンポーネント）
+17. 学習モードへの書き順タブ追加
+18. 手書き練習画面（app/write/index.tsx）
+19. 手書きサービス（TF.js Web / ML Kit Native）
+20. GitHub Pages 再デプロイ・動作確認
 --- 以下は MVP 外（後から追加） ---
-17. Supabase 連携（クラウド保存・認証）
+21. Supabase 連携（クラウド保存・認証）
