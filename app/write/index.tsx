@@ -27,7 +27,7 @@ export default function WriteScreen() {
   const { width: windowWidth } = useWindowDimensions();
   // 画面幅に応じて練習キャンバスのサイズを可変にする（固定260pxだと
   // 広い画面で紙の領域が狭く見える・文字が窮屈になる問題への対応）
-  const canvasSize = Math.min(Math.max(windowWidth - spacing.lg * 2 - 16, 260), 400);
+  const canvasSize = Math.min(Math.max(windowWidth - spacing.lg * 2 - 16, 260), 340);
 
   // 初回レンダリングはサーバー/クライアントで一致させるため未シャッフルの順序を使い、
   // マウント後（ハイドレーション完了後）に useEffect でシャッフルする
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
   scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
   wordCard: {
-    backgroundColor: Colors.card, borderRadius: radius.card, padding: spacing.lg,
-    alignItems: 'center', marginBottom: spacing.md,
+    backgroundColor: Colors.card, borderRadius: radius.card, padding: spacing.md,
+    alignItems: 'center', marginBottom: spacing.sm,
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08, shadowRadius: 12, elevation: 4,
   },
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: radius.small,
     overflow: 'hidden',
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   tab: {
     flex: 1,

@@ -194,6 +194,7 @@ export function StrokeAnimation({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={characterInfos.length > 1}
+        style={styles.scrollRow}
         contentContainerStyle={styles.row}
       >
         {characterInfos.map((info, index) => renderCharacter(info, `${info.char}-${index}`))}
@@ -231,8 +232,13 @@ export function StrokeAnimation({
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
+  },
+  scrollRow: {
+    width: '100%',
+    alignSelf: 'stretch',
   },
   row: {
     flexDirection: 'row',
