@@ -46,6 +46,9 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
 
   const currentStrokeRef = useRef<string[]>([]);
   const isDrawingRef = useRef<boolean>(false);
+  // 不正解時に「判定」ボタンからブラウザのフォーカスを外し、「やり直す」ボタンへ移すためのref。
+  // React Native の View は NativeMethods（focus/blur）を実装しているため any を使わず型安全に扱える。
+  const retryButtonRef = useRef<View>(null);
 
   // 確定したストロークをコミットする。ドラッグなし（or ごく僅かな移動）のクリックは
   // 見た目には何も描かれないのに画数だけ増える「ノイズストローク」になるため除外する。
@@ -119,6 +122,11 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
       };
       setResult(res);
       onResult?.(res);
+      if (!res.isCorrect) {
+        // 「判定」ボタンに残ったフォーカスを「やり直す」ボタンへ移し、
+        // 不正解時に「判定」が選択状態のまま見えてしまう問題を防ぐ
+        retryButtonRef.current?.focus();
+      }
     } catch (e) {
       console.error('判定エラー:', e);
     } finally {
@@ -211,7 +219,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
       )}
 
       <View style={styles.controls}>
-        <TouchableOpacity style={styles.button} onPress={handleRetry}>
+        <TouchableOpacity ref={retryButtonRef} style={styles.button} onPress={handleRetry}>
           <Text style={styles.buttonText}>やり直す</Text>
         </TouchableOpacity>
         <TouchableOpacity

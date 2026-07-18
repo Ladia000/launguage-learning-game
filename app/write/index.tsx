@@ -120,7 +120,11 @@ export default function WriteScreen() {
         </Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
         <View style={styles.wordCard}>
           <Text style={styles.hanzi}>{current.hanzi}</Text>
           <Text style={styles.pinyin}>{current.pinyin}</Text>
@@ -186,6 +190,7 @@ const styles = StyleSheet.create({
   back: { fontSize: fontSize.body, color: Colors.primary, fontWeight: '600' },
   headerTitle: { fontSize: fontSize.h2, fontWeight: '700', color: Colors.text },
   progressText: { fontSize: fontSize.body, color: Colors.textSub, fontWeight: '600' },
+  scrollView: { flex: 1 },
   scrollContent: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
   wordCard: {
     backgroundColor: Colors.card, borderRadius: radius.card, padding: spacing.lg,
