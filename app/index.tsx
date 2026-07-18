@@ -34,7 +34,7 @@ export default function HomeScreen() {
   const { isTablet } = useDeviceType();
 
   if (!isOnboardingDone) {
-    return <Redirect href="/onboarding" />;
+    return <Redirect href="/entry" />;
   }
 
   const known = knownCount();

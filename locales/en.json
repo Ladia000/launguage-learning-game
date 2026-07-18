@@ -6,6 +6,12 @@
     "loading": "Loading...",
     "confirm": "Confirm"
   },
+  "entry": {
+    "meansHello": "means \"hello\"",
+    "headline": "Learn Chinese, playfully",
+    "subtitle": "Bite-size games for every age — from your first \"nǐ hǎo\" to full conversations. No pressure, just play.",
+    "cta": "Let's Go"
+  },
   "home": {
     "title": "Chinese Quiz",
     "learn": "Study Mode",
