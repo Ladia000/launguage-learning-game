@@ -11,6 +11,7 @@ import { useSettingsStore } from '../../store/useSettingsStore';
 import { AudioButton } from '../../components/AudioButton';
 import { ProgressBar } from '../../components/ProgressBar';
 import { StrokeAnimation } from '../../components/StrokeAnimation';
+import { CoffeeBreakButton } from '../../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 import type { Word } from '../../types';
 
@@ -119,7 +120,7 @@ export default function LearnScreen() {
           <Text style={styles.back}>‹ {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('learn.title')}</Text>
-        <View style={{ width: 60 }} />
+        <CoffeeBreakButton />
       </View>
 
       <ProgressBar current={index + 1} total={words.length} />

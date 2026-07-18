@@ -10,6 +10,7 @@ import { useMistakeStore } from '../../store/useMistakeStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { ChoiceButton } from '../../components/ChoiceButton';
 import { ProgressBar } from '../../components/ProgressBar';
+import { CoffeeBreakButton } from '../../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 
 type ChoiceState = 'default' | 'correct' | 'wrong';
@@ -98,7 +99,10 @@ export default function TestScreen() {
           <Text style={styles.back}>✕</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('test.title')}</Text>
-        <Text style={styles.questionNum}>{t('test.question', { current: currentIndex + 1, total: questions.length })}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Text style={styles.questionNum}>{t('test.question', { current: currentIndex + 1, total: questions.length })}</Text>
+          <CoffeeBreakButton />
+        </View>
       </View>
 
       <ProgressBar current={currentIndex + 1} total={questions.length} showText={false} />

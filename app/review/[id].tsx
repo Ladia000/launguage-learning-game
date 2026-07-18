@@ -9,6 +9,7 @@ import { useWordStore } from '../../store/useWordStore';
 import { useTestStore } from '../../store/useTestStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { AudioButton } from '../../components/AudioButton';
+import { CoffeeBreakButton } from '../../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 import type { MistakeHistory } from '../../types';
 
@@ -63,7 +64,7 @@ export default function WordDetailScreen() {
           <Text style={styles.back}>‹ {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('wordDetail.title')}</Text>
-        <View style={{ width: 60 }} />
+        <CoffeeBreakButton />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>

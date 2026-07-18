@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useWordStore } from '../store/useWordStore';
 import { useMistakeStore } from '../store/useMistakeStore';
+import { CoffeeBreakButton } from '../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../constants/typography';
 import type { Language, QuizCount } from '../types';
 
@@ -70,7 +71,7 @@ export default function SettingsScreen() {
           <Text style={styles.back}>‹ {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('settings.title')}</Text>
-        <View style={{ width: 60 }} />
+        <CoffeeBreakButton />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>

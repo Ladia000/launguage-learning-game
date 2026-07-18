@@ -9,6 +9,7 @@ import { useWordStore } from '../store/useWordStore';
 import { useMistakeStore } from '../store/useMistakeStore';
 import { useWriteStore } from '../store/useWriteStore';
 import { useDeviceType } from '../hooks/useDeviceType';
+import { CoffeeBreakButton } from '../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../constants/typography';
 
 interface ModeCard {
@@ -49,12 +50,7 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Text style={styles.title}>{t('home.title')}</Text>
           <View style={styles.headerActions}>
-            <TouchableOpacity
-              style={styles.coffeeButton}
-              onPress={() => router.push('/entry')}
-            >
-              <Text style={styles.coffeeButtonText}>{t('home.coffeeBreak')}</Text>
-            </TouchableOpacity>
+            <CoffeeBreakButton />
             <TouchableOpacity
               style={styles.settingsButton}
               onPress={() => router.push('/settings')}
@@ -117,11 +113,6 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: fontSize.h1, fontWeight: '800', color: Colors.text },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  coffeeButton: {
-    backgroundColor: '#C67139', borderRadius: 999,
-    paddingHorizontal: 14, paddingVertical: 8,
-  },
-  coffeeButtonText: { color: '#F5EAD8', fontSize: fontSize.small, fontWeight: '600' },
   settingsButton: { padding: 8 },
   settingsIcon: { fontSize: 24 },
   progressCard: {

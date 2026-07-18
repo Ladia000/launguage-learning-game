@@ -9,6 +9,7 @@ import { useWordStore } from '../../store/useWordStore';
 import { useTestStore } from '../../store/useTestStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { WrongWordCard } from '../../components/WrongWordCard';
+import { CoffeeBreakButton } from '../../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 import type { MistakeRecord } from '../../types';
 
@@ -51,7 +52,7 @@ export default function ReviewScreen() {
           <Text style={styles.back}>‹ {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('review.title')}</Text>
-        <View style={{ width: 60 }} />
+        <CoffeeBreakButton />
       </View>
 
       {/* フィルターバー */}

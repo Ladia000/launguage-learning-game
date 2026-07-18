@@ -10,6 +10,7 @@ import { useSettingsStore } from '../../store/useSettingsStore';
 import { AudioButton } from '../../components/AudioButton';
 import { StrokeAnimation } from '../../components/StrokeAnimation';
 import { WriteCanvas } from '../../components/WriteCanvas';
+import { CoffeeBreakButton } from '../../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../../constants/typography';
 import type { Word, HandwritingResult } from '../../types';
 
@@ -115,9 +116,12 @@ export default function WriteScreen() {
           <Text style={styles.back}>‹ {t('common.back')}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('write.title')}</Text>
-        <Text style={styles.progressText}>
-          {currentIndex + 1} / {wordList.length}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Text style={styles.progressText}>
+            {currentIndex + 1} / {wordList.length}
+          </Text>
+          <CoffeeBreakButton />
+        </View>
       </View>
 
       <ScrollView

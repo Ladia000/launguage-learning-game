@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useTestStore } from '../store/useTestStore';
 import { useSettingsStore } from '../store/useSettingsStore';
+import { CoffeeBreakButton } from '../components/CoffeeBreakButton';
 import { Colors, fontSize, spacing, radius } from '../constants/typography';
 
 export default function ResultScreen() {
@@ -56,6 +57,9 @@ export default function ResultScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.coffeeHeader}>
+        <CoffeeBreakButton />
+      </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
 
         {isPerfect ? (
@@ -127,6 +131,10 @@ export default function ResultScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
+  coffeeHeader: {
+    flexDirection: 'row', justifyContent: 'flex-end',
+    paddingHorizontal: spacing.lg, paddingTop: spacing.md,
+  },
   scroll: { paddingBottom: 40 },
   perfectSection: { alignItems: 'center', paddingTop: 40, paddingHorizontal: spacing.lg },
   badgeWrap: {
