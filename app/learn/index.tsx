@@ -188,7 +188,7 @@ export default function LearnScreen() {
             )}
 
             {activeTab === 'stroke' && (
-              <StrokeAnimation hanzi={current.hanzi} size={160} autoPlay={false} showGrid={true} />
+              <StrokeAnimation hanzi={current.hanzi} size={160} autoPlay={true} showGrid={true} />
             )}
 
             {activeTab === 'example' && (
