@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Svg, { Path, G, Line, Text as SvgText } from 'react-native-svg';
-import { recognizeHandwriting } from '@/services/handwriting';
+import { getStrokeCount } from '@/services/strokeOrder';
 import type { HandwritingResult } from '@/types';
 
 interface Props {
@@ -12,6 +12,12 @@ interface Props {
 }
 
 const strokeToPath = (stroke: string[]): string => stroke.join(' ');
+
+const getSampleFontScale = (hanzi: string): number => {
+  if (hanzi.length === 1) return 0.28;
+  if (hanzi.length === 2) return 0.16;
+  return 0.12;
+};
 
 export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   const [strokes, setStrokes] = useState<string[][]>([]);
@@ -64,11 +70,24 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   };
 
   const handleJudge = async () => {
-    if (strokes.length === 0) return;
-    console.log('strokes:', strokes.length);
+    console.log('判定ボタン押下 strokes:', strokes.length);
+    if (strokes.length === 0) {
+      console.log('ストロークなし - スキップ');
+      return;
+    }
     setIsRecognizing(true);
     try {
-      const res = await recognizeHandwriting('', expectedChar, strokes.length);
+      // Web版はストローク数比較方式を使用
+      const expectedCount = getStrokeCount(expectedChar);
+      console.log('期待画数:', expectedCount, 'ユーザー画数:', strokes.length);
+      const diff = Math.abs(strokes.length - (expectedCount || strokes.length));
+      const isCorrect = expectedCount === 0 || diff <= 1;
+      const confidence = Math.max(0, 1 - diff * 0.2);
+      const res: HandwritingResult = {
+        recognized: expectedChar,
+        confidence,
+        isCorrect,
+      };
       setResult(res);
       onResult?.(res);
     } catch (e) {
@@ -108,7 +127,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
           <SvgText
             x={size / 2}
             y={size / 2}
-            fontSize={size * 0.6}
+            fontSize={size * getSampleFontScale(expectedChar)}
             fill="#534AB7"
             opacity={0.08}
             textAnchor="middle"

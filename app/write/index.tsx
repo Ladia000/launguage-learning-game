@@ -40,7 +40,7 @@ export default function WriteScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>('stroke');
   const [results, setResults] = useState<HandwritingResult[]>([]);
-  const [showNext, setShowNext] = useState(false);
+  const [hasResult, setHasResult] = useState(false);
   const [done, setDone] = useState(false);
 
   const current = wordList[currentIndex];
@@ -55,7 +55,7 @@ export default function WriteScreen() {
   };
 
   const goToNext = () => {
-    setShowNext(false);
+    setHasResult(false);
     setActiveTab('stroke');
     if (currentIndex + 1 >= wordList.length) {
       setDone(true);
@@ -67,10 +67,9 @@ export default function WriteScreen() {
   const handleResult = (result: HandwritingResult) => {
     recordPractice(current.id, current.hanzi, result.confidence * 100);
     setResults((prev) => [...prev, result]);
+    setHasResult(true);
     if (result.isCorrect) {
       setTimeout(goToNext, AUTO_ADVANCE_DELAY_MS);
-    } else {
-      setShowNext(true);
     }
   };
 
@@ -157,15 +156,19 @@ export default function WriteScreen() {
           {activeTab === 'practice' && (
             <WriteCanvas
               key={current.id}
-              expectedChar={current.hanzi}
+              expectedChar={current.hanzi.charAt(0)}
               size={canvasSize}
               onResult={handleResult}
             />
           )}
         </View>
 
-        {showNext && (
-          <TouchableOpacity style={styles.nextButton} onPress={goToNext}>
+        {activeTab === 'practice' && (
+          <TouchableOpacity
+            style={[styles.nextButton, !hasResult && styles.nextButtonDisabled]}
+            onPress={goToNext}
+            disabled={!hasResult}
+          >
             <Text style={styles.nextButtonText}>{t('write.next')}</Text>
           </TouchableOpacity>
         )}
@@ -231,6 +234,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.button,
     paddingVertical: 14,
     alignItems: 'center',
+  },
+  nextButtonDisabled: {
+    backgroundColor: Colors.border,
   },
   nextButtonText: { color: '#fff', fontSize: fontSize.button, fontWeight: '700' },
   doneContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl },

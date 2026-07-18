@@ -20,6 +20,12 @@ interface Props {
 
 const strokeToPath = (stroke: string[]): string => stroke.join(' ');
 
+const getSampleFontScale = (hanzi: string): number => {
+  if (hanzi.length === 1) return 0.28;
+  if (hanzi.length === 2) return 0.16;
+  return 0.12;
+};
+
 export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
   const [strokes, setStrokes] = useState<string[][]>([]);
   const [currentStroke, setCurrentStroke] = useState<string[]>([]);
@@ -88,7 +94,7 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
           <SvgText
             x={size / 2}
             y={size / 2}
-            fontSize={size * 0.6}
+            fontSize={size * getSampleFontScale(expectedChar)}
             fill="#534AB7"
             opacity={0.08}
             textAnchor="middle"
