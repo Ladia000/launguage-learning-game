@@ -18,7 +18,26 @@ interface Props {
   onResult?: (result: HandwritingResult) => void;
 }
 
+// タップしただけ（ドラッグなし）の見えない極小ストロークをノイズとして除外するための閾値（px）
+const MIN_STROKE_DISTANCE = 3;
+
 const strokeToPath = (stroke: string[]): string => stroke.join(' ');
+
+const parseCommandPoint = (command: string): { x: number; y: number } => {
+  const parts = command.split(' ');
+  return { x: parseFloat(parts[1]), y: parseFloat(parts[2]) };
+};
+
+// ストロークを構成する各点間のユークリッド距離を合計した総移動距離を求める
+const getStrokeDistance = (stroke: string[]): number => {
+  let total = 0;
+  for (let i = 1; i < stroke.length; i++) {
+    const prev = parseCommandPoint(stroke[i - 1]);
+    const curr = parseCommandPoint(stroke[i]);
+    total += Math.hypot(curr.x - prev.x, curr.y - prev.y);
+  }
+  return total;
+};
 
 const getSampleFontScale = (hanzi: string): number => {
   if (hanzi.length === 1) return 0.28;
@@ -52,7 +71,12 @@ export function WriteCanvas({ expectedChar, size = 280, onResult }: Props) {
         setCurrentStroke(currentStrokeRef.current);
       },
       onPanResponderRelease: () => {
-        if (currentStrokeRef.current.length > 0) {
+        // タップのみ（ドラッグなし・ごく僅かな移動）は見た目に何も描かれないのに
+        // 画数だけ増える「ノイズストローク」になるため除外する
+        if (
+          currentStrokeRef.current.length > 0 &&
+          getStrokeDistance(currentStrokeRef.current) >= MIN_STROKE_DISTANCE
+        ) {
           strokesRef.current = [...strokesRef.current, currentStrokeRef.current];
           setStrokes(strokesRef.current);
         }
