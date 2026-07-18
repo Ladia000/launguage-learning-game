@@ -413,11 +413,25 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 |---|---|---|---|
 | build-agent | UI設計・概要設計・実装・不具合修正 | Sonnet(難所のみOpus) | Read, Write, Edit, Bash, Glob, Grep |
 | test-agent | テスト実行・結果要約 | Haiku | Bash, Read, Grep |
+| advisor-agent | 開発プロセス監視・エージェント/MCP/Skills活用の提案 | Opus | Read, Grep, Glob |
+
+定義ファイルは `.claude/agents/build-agent.md` / `test-agent.md` / `advisor-agent.md` に置く。
 
 - 設計・実装は build-agent に委任する
 - 実装完了後は必ず test-agent を呼び出してテスト確認を行う
 - build-agent はテストを実行しない、test-agent はコードを変更しない
-- 2〜3ファイル以上に触れる変更は、実行前に「触るファイル一覧」と「変更内容」を提示し、確認を得てから着手する
+- advisor-agent はコードを一切変更しない。フェーズ完了時や週次の振り返りで呼び出す
+- advisor-agent は Claude Code エージェント・MCP・Agent Skills 等の技術導入も積極的に提案する。ただし実際の導入判断・実行は Moon が行う
+- 2〜3ファイル以上に触れる変更は、実行前に「触るファイル一覧」と「変更内容」を提示し、確認を得てから着手する。ただし既知バグの小規模修正（原因・方針が既に明確なもの）はこの限りでなく、実装後の事後報告でよい
+- 実装後は可能な範囲で実機/ブラウザでの動作確認を行う（詳細は下記「実機確認ルール」）
+
+#### `.claude/agents/*.md` を新規作成・編集した場合の注意
+
+Claude Code は `.claude/agents/` ディレクトリをファイル監視しており、既存ディレクトリ内のファイル追加・編集は数秒で反映され `subagent_type` として即座に呼び出せる。**ただしそのディレクトリ自体がセッション開始時点で存在しなかった場合、そのセッション中は監視が有効化されず、新規作成したエージェント定義は同一セッション内では認識されない**（`Agent type 'xxx' not found` エラーになる）。この場合は以下のフォールバックで代替する:
+
+- Agentツールを `subagent_type: "general-purpose"` で呼び出し、`model` パラメータに対応するモデル（build-agent→sonnet、test-agent→haiku、advisor-agent→opus）を明示的に指定する
+- プロンプト冒頭で「`.claude/agents/xxx.md` に定義された xxx として振る舞ってください」と役割を明示し、許可ツールの制約（例: test-agentはBash/Read/Grepのみ）もプロンプト内で明記する
+- 新しいセッション（会話）を開始すれば、`.claude/agents/` は既に存在するため通常通り `subagent_type` で直接呼び出せる
 
 ### モデル使い分け
 
@@ -426,16 +440,15 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 - **Opus**: 難所のデバッグ・アーキテクチャ判断のみ(常用しない)
 - 重い実装作業は、5時間のロールングウィンドウ開始直後に配置する
 
+### 実機確認ルール
+
+- tsc/jest で検証できるのは型・ロジックのみ。UIの見た目・実際の操作感（スクロール、タッチ操作、アニメーション等）に関わる修正は、可能な限り実際にブラウザ（またはエミュレータ）で動作確認してから完了とする
+- 手順は `.claude/skills/visual-check/SKILL.md` を参照（Expo webの起動・Playwright(chromium/webkit)によるスクリーンショット取得・console監視の定型手順）
+- 緊急でユーザーが確認を急いでいる場合は、tsc/jestのみで一旦pushしてよいが、その場合は「視覚的な動作確認は未実施」であることを明示する
+
 ### コンテキスト節約ルール
 
 - ファイルは全文を貼らず、パス参照で読み込ませる(例:「src/auth.tsのvalidateToken関数を見て」)
 - ログ・スタックトレースは関連する20〜30行のみ抜粋して渡す
 - 大きいファイル(ロックファイル・ビルドログ等)はパス参照のみに留め、内容をコンテキストに入れない
 - 無関係な作業に移る際は `/clear`、長い会話が続く場合は `/compact` を使う
-
----
-
-| advisor-agent | 開発プロセス監視・エージェント/MCP/Skills活用の提案 | Opus | Read, Grep, Glob |
-
-- advisor-agent はコードを一切変更しない。フェーズ完了時や週次の振り返りで呼び出す
-- advisor-agent は Claude Code エージェント・MCP・Agent Skills 等の技術導入も積極的に提案する。ただし実際の導入判断・実行は Moon が行う
