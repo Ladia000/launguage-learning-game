@@ -48,12 +48,20 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>{t('home.title')}</Text>
-          <TouchableOpacity
-            style={styles.settingsButton}
-            onPress={() => router.push('/settings')}
-          >
-            <Text style={styles.settingsIcon}>⚙️</Text>
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={styles.coffeeButton}
+              onPress={() => router.push('/entry')}
+            >
+              <Text style={styles.coffeeButtonText}>{t('home.coffeeBreak')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => router.push('/settings')}
+            >
+              <Text style={styles.settingsIcon}>⚙️</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Progress card */}
@@ -108,6 +116,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.md,
   },
   title: { fontSize: fontSize.h1, fontWeight: '800', color: Colors.text },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  coffeeButton: {
+    backgroundColor: '#C67139', borderRadius: 999,
+    paddingHorizontal: 14, paddingVertical: 8,
+  },
+  coffeeButtonText: { color: '#F5EAD8', fontSize: fontSize.small, fontWeight: '600' },
   settingsButton: { padding: 8 },
   settingsIcon: { fontSize: 24 },
   progressCard: {

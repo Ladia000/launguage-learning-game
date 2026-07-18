@@ -25,7 +25,8 @@
     "settings": "Settings",
     "write": "Writing Practice",
     "writeDesc": "Practice writing kanji",
-    "todayWrite": "{{count}} characters practiced today"
+    "todayWrite": "{{count}} characters practiced today",
+    "coffeeBreak": "Coffee break ☕"
   },
   "learn": {
     "title": "Study Mode",

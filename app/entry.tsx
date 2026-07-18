@@ -54,10 +54,17 @@ export default function EntryScreen() {
       <SafeAreaView style={styles.safeArea}>
         {/* Navigation bar */}
         <View style={styles.navBar}>
-          <View style={styles.logoBadge}>
-            <Text style={[styles.logoBadgeText, { fontFamily: headingFont }]}>你</Text>
+          <View style={styles.logoGroup}>
+            <View style={styles.logoBadge}>
+              <Text style={[styles.logoBadgeText, { fontFamily: headingFont }]}>你</Text>
+            </View>
+            <Text style={[styles.logoText, { fontFamily: headingFont }]}>Nǐ Hǎo</Text>
           </View>
-          <Text style={[styles.logoText, { fontFamily: headingFont }]}>Nǐ Hǎo</Text>
+          {router.canGoBack() && (
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Text style={styles.backButtonText}>‹ {t('common.back')}</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Main content */}
@@ -153,8 +160,21 @@ const styles = StyleSheet.create({
   navBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingTop: 16,
+  },
+  logoGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
+  backButtonText: {
+    color: '#201E1D',
+    fontSize: 15,
   },
   logoBadge: {
     width: 34,

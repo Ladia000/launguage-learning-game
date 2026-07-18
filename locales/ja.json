@@ -25,7 +25,8 @@
     "settings": "設定",
     "write": "手書き練習",
     "writeDesc": "漢字を書いて覚えよう",
-    "todayWrite": "今日 {{count}} 文字練習済み"
+    "todayWrite": "今日 {{count}} 文字練習済み",
+    "coffeeBreak": "休憩☕"
   },
   "learn": {
     "title": "学習モード",
