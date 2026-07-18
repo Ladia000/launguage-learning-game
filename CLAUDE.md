@@ -434,3 +434,8 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 - 無関係な作業に移る際は `/clear`、長い会話が続く場合は `/compact` を使う
 
 ---
+
+| advisor-agent | 開発プロセス監視・エージェント/MCP/Skills活用の提案 | Opus | Read, Grep, Glob |
+
+- advisor-agent はコードを一切変更しない。フェーズ完了時や週次の振り返りで呼び出す
+- advisor-agent は Claude Code エージェント・MCP・Agent Skills 等の技術導入も積極的に提案する。ただし実際の導入判断・実行は Moon が行う
